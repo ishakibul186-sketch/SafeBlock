@@ -1,0 +1,5 @@
+{
+  "name": "Safe Block Extension Simulator",
+  "description": "A web application that simulates a browser extension for blocking adult websites and custom URLs, complete with password protection and a modern user interface.",
+  "requestFramePermissions": []
+}
