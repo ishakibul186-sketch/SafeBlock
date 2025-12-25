@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import ShieldIcon from './icons/ShieldIcon';
 import CheckCircleIcon from './icons/CheckCircleIcon';
+import InstallInstructionsModal from './InstallInstructionsModal';
 
 // --- Extension File Contents ---
 
@@ -326,6 +327,7 @@ declare var JSZip: any;
 
 const HomePage: React.FC<HomePageProps> = ({ onInstall }) => {
   const [isDownloading, setIsDownloading] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   const handleDownloadAndInstall = async () => {
     setIsDownloading(true);
@@ -349,70 +351,80 @@ const HomePage: React.FC<HomePageProps> = ({ onInstall }) => {
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(link.href);
+      
+      setShowInstructions(true);
 
     } catch (error) {
       console.error("Failed to generate zip file:", error);
       alert("Could not generate the extension file. Please try again.");
     } finally {
       setIsDownloading(false);
-      onInstall();
     }
   };
 
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-slate-50 to-gray-200 dark:from-slate-900 dark:to-gray-800">
-      <div className="w-full max-w-4xl mx-auto">
-        <header className="flex items-center justify-between p-4 mb-8 bg-white dark:bg-slate-800/50 rounded-lg shadow-md backdrop-blur-sm">
-          <div className="flex items-center space-x-3">
-            <ShieldIcon className="w-8 h-8 text-blue-500" />
-            <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Safe Block</h1>
-          </div>
-          <button
-            onClick={handleDownloadAndInstall}
-            disabled={isDownloading}
-            className="px-6 py-2 font-semibold text-white bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-transform transform hover:scale-105 disabled:bg-blue-400 disabled:cursor-not-allowed disabled:scale-100"
-          >
-            {isDownloading ? 'Downloading...' : 'Download Extension & Continue'}
-          </button>
-        </header>
-
-        <main className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="p-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg">
-            <h2 className="text-3xl font-extrabold mb-4 text-slate-900 dark:text-white">Your Digital Guardian for a Safer Web</h2>
-            <p className="mb-6 text-slate-600 dark:text-slate-300">
-              Safe Block is a powerful, user-friendly browser extension designed to create a secure and focused online environment. It effectively blocks access to adult content and allows you to customize your own blocklist, putting you in complete control of your digital space.
-            </p>
-            <div className="space-y-4">
-               <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100">Key Features:</h3>
-               <ul className="space-y-3">
-                <li className="flex items-start">
-                  <CheckCircleIcon className="w-6 h-6 mr-3 text-green-500 flex-shrink-0 mt-1" />
-                  <span className="text-slate-600 dark:text-slate-300"><strong>Comprehensive Adult Site Blocking:</strong> Automatically blocks a vast database of inappropriate websites.</span>
-                </li>
-                <li className="flex items-start">
-                  <CheckCircleIcon className="w-6 h-6 mr-3 text-green-500 flex-shrink-0 mt-1" />
-                  <span className="text-slate-600 dark:text-slate-300"><strong>Custom Blocklist:</strong> Add any website URL you wish to block for a personalized and productive browsing experience.</span>
-                </li>
-                 <li className="flex items-start">
-                  <CheckCircleIcon className="w-6 h-6 mr-3 text-green-500 flex-shrink-0 mt-1" />
-                  <span className="text-slate-600 dark:text-slate-300"><strong>Password Protection:</strong> Secure your settings with a password to prevent unauthorized changes.</span>
-                </li>
-                 <li className="flex items-start">
-                  <CheckCircleIcon className="w-6 h-6 mr-3 text-green-500 flex-shrink-0 mt-1" />
-                  <span className="text-slate-600 dark:text-slate-300"><strong>Sleek & Simple Interface:</strong> Managing your protection is intuitive and hassle-free.</span>
-                </li>
-              </ul>
+    <>
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-slate-50 to-gray-200 dark:from-slate-900 dark:to-gray-800">
+        <div className="w-full max-w-4xl mx-auto">
+          <header className="flex items-center justify-between p-4 mb-8 bg-white dark:bg-slate-800/50 rounded-lg shadow-md backdrop-blur-sm">
+            <div className="flex items-center space-x-3">
+              <ShieldIcon className="w-8 h-8 text-blue-500" />
+              <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Safe Block</h1>
             </div>
-          </div>
-          <div className="overflow-hidden rounded-lg shadow-lg">
-             <img src="https://picsum.photos/800/600?random=1" alt="Abstract digital art" className="object-cover w-full h-full transition-transform duration-500 hover:scale-110" />
-          </div>
-        </main>
+            <button
+              onClick={handleDownloadAndInstall}
+              disabled={isDownloading}
+              className="px-6 py-2 font-semibold text-white bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-transform transform hover:scale-105 disabled:bg-blue-400 disabled:cursor-not-allowed disabled:scale-100"
+            >
+              {isDownloading ? 'Downloading...' : 'Download Extension & Continue'}
+            </button>
+          </header>
+
+          <main className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="p-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg">
+              <h2 className="text-3xl font-extrabold mb-4 text-slate-900 dark:text-white">Your Digital Guardian for a Safer Web</h2>
+              <p className="mb-6 text-slate-600 dark:text-slate-300">
+                Safe Block is a powerful, user-friendly browser extension designed to create a secure and focused online environment. It effectively blocks access to adult content and allows you to customize your own blocklist, putting you in complete control of your digital space.
+              </p>
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100">Key Features:</h3>
+                <ul className="space-y-3">
+                  <li className="flex items-start">
+                    <CheckCircleIcon className="w-6 h-6 mr-3 text-green-500 flex-shrink-0 mt-1" />
+                    <span className="text-slate-600 dark:text-slate-300"><strong>Comprehensive Adult Site Blocking:</strong> Automatically blocks a vast database of inappropriate websites.</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircleIcon className="w-6 h-6 mr-3 text-green-500 flex-shrink-0 mt-1" />
+                    <span className="text-slate-600 dark:text-slate-300"><strong>Custom Blocklist:</strong> Add any website URL you wish to block for a personalized and productive browsing experience.</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircleIcon className="w-6 h-6 mr-3 text-green-500 flex-shrink-0 mt-1" />
+                    <span className="text-slate-600 dark:text-slate-300"><strong>Password Protection:</strong> Secure your settings with a password to prevent unauthorized changes.</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircleIcon className="w-6 h-6 mr-3 text-green-500 flex-shrink-0 mt-1" />
+                    <span className="text-slate-600 dark:text-slate-300"><strong>Sleek & Simple Interface:</strong> Managing your protection is intuitive and hassle-free.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div className="overflow-hidden rounded-lg shadow-lg">
+              <img src="https://picsum.photos/800/600?random=1" alt="Abstract digital art" className="object-cover w-full h-full transition-transform duration-500 hover:scale-110" />
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+      {showInstructions && (
+        <InstallInstructionsModal 
+          onClose={() => {
+            setShowInstructions(false);
+            onInstall();
+          }} 
+        />
+      )}
+    </>
   );
 };
 
 export default HomePage;
-   
